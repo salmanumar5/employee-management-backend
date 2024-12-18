@@ -9,9 +9,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb" }));
+
+const corsOptions = {
+  origin: "https://employee-tracker-isomorphic.vercel.app", // Allow requests only from your frontend
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+};
+app.use(cors(corsOptions));
+
+// Handle Preflight Requests
+app.options("*", cors(corsOptions));
 
 // Routes
 app.use("/api", require("./routes/api"));
